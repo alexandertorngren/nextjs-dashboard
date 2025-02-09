@@ -1,6 +1,9 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
+/* NOTE: Uncomment this code in Chapter 7 */
+/*
 import clsx from 'clsx';
 import Image from 'next/image';
+*/
 import { lusitana } from '@/fonts/fonts';
 import { LatestInvoice } from '@/lib/definitions';
 export default async function LatestInvoices({
@@ -8,6 +11,7 @@ export default async function LatestInvoices({
 }: {
   latestInvoices: LatestInvoice[];
 }) {
+  console.log(latestInvoices);
   return (
     <div className='flex w-full flex-col md:col-span-4'>
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>

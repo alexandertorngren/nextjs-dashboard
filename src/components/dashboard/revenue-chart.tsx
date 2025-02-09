@@ -1,5 +1,7 @@
+/*
 import { generateYAxis } from '@/lib/utils';
 import { CalendarIcon } from '@heroicons/react/24/outline';
+*/
 import { lusitana } from '@/fonts/fonts';
 import { Revenue } from '@/lib/definitions';
 
@@ -14,7 +16,8 @@ export default async function RevenueChart({
 }: {
   revenue: Revenue[];
 }) {
-  const chartHeight = 350;
+  console.log(revenue);
+  //const chartHeight = 350;
   // NOTE: Uncomment this code in Chapter 7
 
   // const { yAxisLabels, topLabel } = generateYAxis(revenue);
