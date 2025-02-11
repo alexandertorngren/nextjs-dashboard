@@ -1,8 +1,8 @@
+import { PrismaClient } from '@prisma/client';
 import { Revenue, InvoiceStatus } from '@/lib/definitions';
-import prisma from '@/lib/prisma';
 import { formatCurrency } from '@/lib/utils';
 
-const monthNames = [
+const MONTH_NAMES = [
   'Jan',
   'Feb',
   'Mar',
@@ -18,6 +18,7 @@ const monthNames = [
 ];
 
 export async function fetchRevenue() {
+  const prisma = new PrismaClient();
   try {
     const data: Revenue[] = await prisma.revenue.findMany({
       select: {
@@ -27,7 +28,7 @@ export async function fetchRevenue() {
     });
 
     const result = data.map((item) => {
-      const monthNumber = monthNames.indexOf(item.month);
+      const monthNumber = MONTH_NAMES.indexOf(item.month);
       return {
         ...item,
         monthNumber: monthNumber,
@@ -45,6 +46,7 @@ export async function fetchRevenue() {
 }
 
 export async function fetchLatestInvoices() {
+  const prisma = new PrismaClient();
   try {
     const data = await prisma.invoice.findMany({
       take: 5,
@@ -75,12 +77,13 @@ export async function fetchLatestInvoices() {
 }
 
 export async function fetchCardData() {
+  const prisma = new PrismaClient();
   try {
     const invoiceCountPromise = prisma.invoice.count();
     const customerCountPromise = prisma.customer.count();
     const invoiceStatusPromise = prisma.invoice.groupBy({
       by: ['status'],
-      _count: { status: true },
+      _count: { _all: true },
       _sum: { amount: true },
     });
 
@@ -92,8 +95,12 @@ export async function fetchCardData() {
 
     const numberOfInvoices = Number(data[0] ?? '0');
     const numberOfCustomers = Number(data[1] ?? '0');
-    const totalPaidInvoices = formatCurrency(data[2][0]._sum.amount ?? 0);
-    const totalPendingInvoices = formatCurrency(data[2][1]._sum.amount ?? 0);
+    const totalPaidInvoices = formatCurrency(
+      data[2].filter((item) => item.status === 'paid')[0]._sum.amount ?? 0
+    );
+    const totalPendingInvoices = formatCurrency(
+      data[2].filter((item) => item.status === 'pending')[0]._sum.amount ?? 0
+    );
 
     await prisma.$disconnect();
     return {
@@ -113,6 +120,7 @@ export async function fetchFilteredInvoices(
   query: string,
   currentPage: number
 ) {
+  const prisma = new PrismaClient();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
@@ -165,6 +173,7 @@ export async function fetchFilteredInvoices(
 }
 
 export async function fetchInvoicesPages(query: string) {
+  const prisma = new PrismaClient();
   try {
     const count = await prisma.invoice.count({
       where: {
@@ -186,6 +195,7 @@ export async function fetchInvoicesPages(query: string) {
 }
 
 export async function fetchInvoiceById(id: string) {
+  const prisma = new PrismaClient();
   try {
     const invoice = await prisma.invoice.findUnique({
       where: { id },
@@ -212,6 +222,7 @@ export async function fetchInvoiceById(id: string) {
 }
 
 export async function fetchCustomers() {
+  const prisma = new PrismaClient();
   try {
     const customers = await prisma.customer.findMany({
       select: {
@@ -228,6 +239,7 @@ export async function fetchCustomers() {
 }
 
 export async function fetchFilteredCustomers(query: string) {
+  const prisma = new PrismaClient();
   try {
     const customers = await prisma.customer.findMany({
       where: {
