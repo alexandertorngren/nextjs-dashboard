@@ -69,21 +69,21 @@ export type Database = {
           customer_id: string | null
           date: string
           id: string
-          status: string
+          status: Database["public"]["Enums"]["InvoiceStatus"]
         }
         Insert: {
           amount: number
           customer_id?: string | null
           date: string
           id: string
-          status: string
+          status?: Database["public"]["Enums"]["InvoiceStatus"]
         }
         Update: {
           amount?: number
           customer_id?: string | null
           date?: string
           id?: string
-          status?: string
+          status?: Database["public"]["Enums"]["InvoiceStatus"]
         }
         Relationships: [
           {
@@ -177,8 +177,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      Role: "USER" | "ADMIN"
-      Sex: "MALE" | "FEMALE" | "OTHER"
+      InvoiceStatus: "paid" | "pending" | "canceled"
+      Role: "user" | "admin"
+      Sex: "male" | "female" | "other"
     }
     CompositeTypes: {
       [_ in never]: never
