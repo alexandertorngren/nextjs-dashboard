@@ -1,7 +1,6 @@
-import { Revenue } from '@/lib/definitions';
+import { Revenue, InvoiceStatus } from '@/lib/definitions';
 import prisma from '@/lib/prisma';
 import { formatCurrency } from '@/lib/utils';
-import { InvoiceStatus } from '@prisma/client';
 
 const monthNames = [
   'Jan',
