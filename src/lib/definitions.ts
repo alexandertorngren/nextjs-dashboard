@@ -1,20 +1,23 @@
-import { InvoiceStatus, Role, Sex } from '@prisma/client';
-import { DateTime } from 'next-auth/providers/kakao';
-
 // This file contains type definitions for your data.
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
+
+export type Role = 'admin' | 'user';
+export type Sex = 'female' | 'male' | 'other';
+export type InvoiceStatus = 'pending' | 'paid' | 'canceled';
+
 export type User = {
   id: string;
   name: string;
   email: string;
   role: Role;
+  profile?: Profile;
 };
 
 export type Profile = {
   id: string;
-  birthdate: DateTime;
+  birthdate: string;
   sex: Sex;
   bio: string;
   image_url: string;
@@ -33,8 +36,6 @@ export type Invoice = {
   customer_id: string;
   amount: number;
   date: string;
-  // In TypeScript, this is called a string union type.
-  // It means that the "status" property can only be one of the two strings: 'pending', 'paid' or 'canceled'.
   status: InvoiceStatus;
 };
 
