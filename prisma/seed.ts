@@ -1,17 +1,16 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-
 const prisma = new PrismaClient();
 
 const userData: Prisma.UserCreateInput[] = [
   {
     name: 'Alice',
     email: 'alice@email.com',
-    role: 'USER',
+    role: 'user',
   },
   {
     name: 'Bob',
     email: 'bob@email.com',
-    role: 'USER',
+    role: 'user',
     profile: {
       create: {
         birthdate: new Date('1990-01-01'),
@@ -22,24 +21,24 @@ const userData: Prisma.UserCreateInput[] = [
   {
     name: 'Admin',
     email: 'admin@email.com',
-    role: 'ADMIN',
+    role: 'admin',
     profile: {
       create: {
         birthdate: new Date('1990-01-01'),
         bio: 'Admin user',
-        sex: 'MALE',
+        sex: 'female',
       },
     },
   },
   {
     name: 'Alexander Torngren',
     email: 'alexander.torngren@drakeanalytics.se',
-    role: 'ADMIN',
+    role: 'admin',
     profile: {
       create: {
         birthdate: new Date('1991-11-04'),
         bio: 'Hobby programmer and entrepreneur on a mission to make the world a better place.',
-        sex: 'MALE',
+        sex: 'male',
       },
     },
   },
@@ -176,6 +175,19 @@ export async function main() {
   for (const d of revenueData) {
     await prisma.revenue.create({ data: d });
   }
+
+  const invoices = await prisma.invoice.findMany();
+  const customers = await prisma.customer.findMany();
+
+  invoices.forEach(async (invoice) => {
+    const randId = Math.floor(Math.random() * 6);
+    const customer = customers[randId];
+
+    await prisma.invoice.update({
+      where: { id: invoice.id },
+      data: { customer: { connect: { id: customer.id } } },
+    });
+  });
 }
 
 main();

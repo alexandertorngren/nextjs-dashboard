@@ -1,3 +1,5 @@
+import { InvoiceStatus } from '@prisma/client';
+
 // This file contains type definitions for your data.
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
@@ -52,7 +54,7 @@ export type InvoicesTable = {
   image_url: string;
   date: string;
   amount: number;
-  status: 'pending' | 'paid';
+  status: InvoiceStatus;
 };
 
 export type CustomersTableType = {
@@ -84,5 +86,5 @@ export type InvoiceForm = {
   id: string;
   customer_id: string;
   amount: number;
-  status: 'pending' | 'paid';
+  status: InvoiceStatus;
 };

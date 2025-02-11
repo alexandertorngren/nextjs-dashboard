@@ -12,7 +12,7 @@ model User {
   id      String   @id @default(uuid()) @db.Uuid
   name    String?
   email   String   @unique
-  role    Role     @default(USER)
+  role    Role     @default(user)
   profile Profile?
 }
 
@@ -35,12 +35,12 @@ model Customer {
 }
 
 model Invoice {
-  id          String    @id @default(uuid()) @db.Uuid
+  id          String        @id @default(uuid()) @db.Uuid
   amount      Int
-  status      String
+  status      InvoiceStatus @default(pending)
   date        DateTime
-  customer_id String?   @db.Uuid
-  customer    Customer? @relation(fields: [customer_id], references: [id])
+  customer_id String?       @db.Uuid
+  customer    Customer?     @relation(fields: [customer_id], references: [id])
 }
 
 model Revenue {
@@ -50,12 +50,18 @@ model Revenue {
 }
 
 enum Sex {
-  MALE
-  FEMALE
-  OTHER
+  male
+  female
+  other
 }
 
 enum Role {
-  USER
-  ADMIN
+  user
+  admin
+}
+
+enum InvoiceStatus {
+  paid
+  pending
+  canceled
 }
