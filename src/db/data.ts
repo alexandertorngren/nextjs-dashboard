@@ -144,8 +144,21 @@ export async function fetchFilteredInvoices(
         },
       },
     });
+
+    const result = invoices.map((invoice) => {
+      return {
+        id: invoice.id,
+        amount: invoice.amount,
+        date: invoice.date,
+        status: invoice.status,
+        name: invoice.customer?.name || 'Unknown',
+        email: invoice.customer?.email || 'Unknown',
+        image_url: invoice.customer?.image_url || 'Unknown',
+      };
+    });
+
     await prisma.$disconnect();
-    return invoices;
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoices.');
